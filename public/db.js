@@ -4,7 +4,7 @@ const indexedDB =
   window.webkitIndexedDB ||
   window.msIndexedDB ||
   window.shimIndexedDB;
-  
+
 let db;
 let budgetVersion;
 
@@ -12,7 +12,7 @@ const request = indexedDB.open("BudgetDB", 1);
 
 request.onupgradeneeded = function(e) {
     let db = e.target.result
-    db.createObjectStore("pending", {autoIncrement: true})
+    db.createObjectStore("BudgetStore", {autoIncrement: true})
 };
 
 request.onerror = function (e) {
