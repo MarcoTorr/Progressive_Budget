@@ -7,7 +7,7 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-let transaction = [];
+let transactions = [];
 let myChart;
 
 fetch("/api/transaction")
@@ -16,7 +16,7 @@ fetch("/api/transaction")
   })
   .then(data => {
     // save db data on global variable
-    transaction = data;
+    transactions = data;
 
     populateTotal();
     populateTable();
@@ -25,7 +25,7 @@ fetch("/api/transaction")
 
 function populateTotal() {
   // reduce transaction amounts to a single total value
-  let total = transaction.reduce((total, t) => {
+  let total = transactions.reduce((total, t) => {
     return total + parseInt(t.value);
   }, 0);
 
@@ -37,7 +37,7 @@ function populateTable() {
   let tbody = document.querySelector("#tbody");
   tbody.innerHTML = "";
 
-  transaction.forEach(transaction => {
+  transactions.forEach(transaction => {
     // create and populate a table row
     let tr = document.createElement("tr");
     tr.innerHTML = `
@@ -51,7 +51,7 @@ function populateTable() {
 
 function populateChart() {
   // copy array and reverse it
-  let reversed = transaction.slice().reverse();
+  let reversed = transactions.slice().reverse();
   let sum = 0;
 
   // create date labels for chart
