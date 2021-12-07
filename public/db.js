@@ -1,10 +1,10 @@
 let db;
 let budgetVersion;
 
-const request = indexedDB.open("BudgetDB", budgetVersion || 1);
+const request = indexedDB.open("BudgetDB", 1);
 
 request.onupgradeneeded = function(e) {
-    const db = e.target.result
+    let db = e.target.result
     db.createObjectStore("pending", {autoIncrement: true})
 };
 
@@ -18,6 +18,11 @@ request.onsuccess = function (e) {
         checkDatabase();
     };
 };
+function saveRecord(record){
+    const transaction = db.transaction(['BudgetStore'], 'readwrite');
+    const store = transaction.objectStore('BudgetStore');
+    store.add(record);
+}
 
 function checkDatabase() {
     let transaction = db.transaction(['BudgetStore'], 'readwrite');
