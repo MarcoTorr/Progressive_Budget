@@ -17,23 +17,23 @@ self.addEventListener("install", function (evt) {
             return cache.addAll(FILES_TO_CACHE);
         })
     );
-    self.skipWaiting();
+    //self.skipWaiting();
 });
 
-self.addEventListener("activate", function (evt) {
-    evt.waitUntil(
-        caches.keys().then((keyList) => {
-            return Promise.all(keyList.map((key) => {
-                if (key !== CACHE_NAME && key !== DATA_CACHE_NAME) {
-                    console.log("Removing old cache data.", key);
-                    return caches.delete(key);
-                }
-            })
-            );
-        })
-    );
-    self.clients.claim();
-});
+// self.addEventListener("activate", function (evt) {
+//     evt.waitUntil(
+//         caches.keys().then((keyList) => {
+//             return Promise.all(keyList.map((key) => {
+//                 if (key !== CACHE_NAME && key !== DATA_CACHE_NAME) {
+//                     console.log("Removing old cache data.", key);
+//                     return caches.delete(key);
+//                 }
+//             })
+//             );
+//         })
+//     );
+//     self.clients.claim();
+// });
 
 self.addEventListener("fetch", function (evt) {
     if (evt.request.url.includes("/api/")) {
@@ -56,7 +56,7 @@ self.addEventListener("fetch", function (evt) {
 
     evt.respondWith(
         fetch(evt.request).catch(function() {
-            return caches.match(Evt.reqeust).then(function(response){
+            return caches.match(evt.request).then(function(response){
                 if(response) {
                     return response;
                 } else if (evt.request.headers.get("accept").includes("text/html")) {
